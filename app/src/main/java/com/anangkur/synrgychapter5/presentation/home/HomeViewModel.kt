@@ -1,0 +1,41 @@
+package com.anangkur.synrgychapter5.presentation.home
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.anangkur.synrgychapter5.domain.Movie
+import com.anangkur.synrgychapter5.domain.repository.HomeRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class HomeViewModel(
+    private val homeRepository: HomeRepository,
+) : ViewModel() {
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
+    private val _movies = MutableLiveData<List<Movie>>()
+    val movies: LiveData<List<Movie>> = _movies
+
+    fun fetchMovies() {
+        _loading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.Main) {
+                    _loading.value = false
+                    _movies.value = homeRepository.fetchMovies()
+                }
+            } catch (exception: Exception) {
+                withContext(Dispatchers.Main) {
+                    _error.value = exception.message
+                }
+            }
+        }
+    }
+}

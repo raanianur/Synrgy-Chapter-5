@@ -16,6 +16,13 @@
         android:gravity="center"
         android:padding="10dp"/>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_movie"
         android:layout_width="match_parent"
