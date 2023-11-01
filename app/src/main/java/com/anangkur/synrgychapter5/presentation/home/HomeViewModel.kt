@@ -26,14 +26,17 @@ class HomeViewModel(
     fun fetchMovies() {
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            runCatching {
+                homeRepository.fetchMovies()
+            }.onFailure { exception ->
                 withContext(Dispatchers.Main) {
                     _loading.value = false
-                    _movies.value = homeRepository.fetchMovies()
-                }
-            } catch (exception: Exception) {
-                withContext(Dispatchers.Main) {
                     _error.value = exception.message
+                }
+            }.onSuccess { movies ->
+                withContext(Dispatchers.Main) {
+                    _loading.value = false
+                    _movies.value = movies
                 }
             }
         }
