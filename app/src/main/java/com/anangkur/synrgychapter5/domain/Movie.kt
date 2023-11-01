@@ -5,4 +5,5 @@ data class Movie(
     val backdropPath: String,
     val originalTitle: String,
     val overview: String,
+    val posterPath: String,
 )

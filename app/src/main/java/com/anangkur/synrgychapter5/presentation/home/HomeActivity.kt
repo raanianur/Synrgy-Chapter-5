@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.anangkur.synrgychapter5.R
 import com.anangkur.synrgychapter5.data.local.LocalRepository
 import com.anangkur.synrgychapter5.data.remote.RemoteRepository
+import com.anangkur.synrgychapter5.data.remote.service.TMDBService
 import com.anangkur.synrgychapter5.databinding.ActivityHomeBinding
 import com.anangkur.synrgychapter5.domain.Movie
 import com.anangkur.synrgychapter5.presentation.adapter.MovieAdapter
 import com.anangkur.synrgychapter5.presentation.auth.login.LoginViewModel
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeActivity : AppCompatActivity() {
 
@@ -53,7 +56,13 @@ class HomeActivity : AppCompatActivity() {
         return object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return HomeViewModel(
-                    homeRepository = RemoteRepository(),
+                    homeRepository = RemoteRepository(
+                        tmdbService = Retrofit.Builder()
+                            .baseUrl("https://api.themoviedb.org/3/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build()
+                            .create(TMDBService::class.java),
+                    ),
                 ) as T
             }
         }.create(HomeViewModel::class.java)
