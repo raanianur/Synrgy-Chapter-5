@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.anangkur.synrgychapter5.data.local.LocalRepository
 import com.anangkur.synrgychapter5.databinding.ActivityLoginBinding
+import com.anangkur.synrgychapter5.presentation.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
     private fun handleAuthentication(token: String) {
         if (token.isNotEmpty() && token.isNotBlank()) {
             viewModel?.saveToken(token)
-            // todo open main activity
+            HomeActivity.startActivity(this)
             this.finish()
         }
     }
